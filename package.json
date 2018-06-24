@@ -2,7 +2,7 @@
   "name": "jeopardy",
   "private": true,
   "version": "0.0.3",
-  "description": "A simple jeopardy game using some gulp and angularjs.  Enjoy.",
+  "description": "A simple jeopardy game using some webpack, typescript and angularjs.  Enjoy.",
   "main": "src/app.js",
   "repository": {
     "type": "git",

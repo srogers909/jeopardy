@@ -1,5 +1,5 @@
 import {IComponentController, ILogService} from "angular";
-import {IGameEngine} from "../services/gameEngine.service";
+import {IGameEngine} from "../app.interfaces";
 
 let template: string = `
     

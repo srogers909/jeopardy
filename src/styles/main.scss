@@ -1,4 +1,7 @@
 @import "primary-colors";
+
+$font-family-base: 'Helvetica Compressed';
+
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
@@ -27,8 +30,16 @@ body {
     border: solid 3px $dark !important;
   }
 
+  table {
+    height: 600px;
+  }
+
   th {
     margin-bottom: 10px !important;
+  }
+
+  td {
+    padding: 0 !important;
   }
 
   .spacer {
@@ -36,17 +47,34 @@ body {
     padding: 0 !important;
   }
 
-  .tile {
+  .tile-header {
     font-weight: bold;
-    font-size: 12px;
+    font-size: 16px;
     background-color: $blue;
     color: $gold;
-    text-align: center;
-    vertical-align: middle;
     white-space: pre-wrap;
-    width: 75px;
-    height: 75px;
     text-transform: capitalize;
+
+    .header-title {
+      position: relative;
+      top: -23px;
+    }
+  }
+
+  .tile {
+    padding-top: 10px !important;
+    font-weight: bold;
+    font-size: 2rem;
+    height: 150px;
+    background-color: $blue;
+    color: $gold;
+    white-space: pre-wrap;
+    text-transform: capitalize;
+  }
+
+  .tile-title {
+    position: relative;
+    top: -57px;
   }
 }
 

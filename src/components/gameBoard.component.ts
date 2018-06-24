@@ -1,72 +1,94 @@
-import {IComponentController, ILogService} from "angular";
-import {IGameEngine} from "../services/gameEngine.service";
+import { IComponentController, ILogService, IQService, ITimeoutService, copy } from "angular";
+import { ICategory, IGameBoard, ITile, IGameEngine } from "../app.interfaces";
 
 let template: string = `
-    <div class="game-board">
-        <table class="table table-bordered table-responsive">
-            <tr>
-                <th 
-                    class="tile"
-                    ng-repeat="category in $ctrl.gameEngine.currentCategories track by category.id">{{ category.title }}</th>                
-            </tr>
-            <tr><td colspan="6" class="spacer">&nbsp;</td></tr>
-            <tr ng-repeat="cat in $ctrl.board track by cat.category.id">
-                <td 
-                    class="tile"
-                    ng-click="$ctrl.gameEngine.getClues({ value: , category: cat.category.id })"
-                    ng-repeat="clueValue in cat.clues track by $index">{{ ::clueValue }}</td>
-            </tr>
-        </table>
+    <div class="game-board row">
+        <div class="col"></div>
+        <div class="col-10">
+            <table class="table">
+                <thead>
+                    <tr scope="col" class="row">
+                        <th 
+                            class="col tile-header align-middle align-content-center"
+                            ng-repeat="category in $ctrl.categories track by category.id">
+                            <div class="header-title text-center">{{ ::category.title }}</div></th>                
+                    </tr>
+                    <tr><td colspan="6" class="spacer">&nbsp;</td></tr>
+                </thead>                
+                <tbody>
+                    <tr ng-repeat="tiles in $ctrl.gameBoard track by $index" class="row">
+                        <td 
+                            ng-repeat="tile in tiles track by $index"
+                            class="col tile align-middle align-content-center"
+                            ng-click="$ctrl.gameEngine.getClues({ value: tile.value, category: tile.category.id })">
+                            <div class="tile-title text-center">{{ ::tile.title }}</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col"></div>
     </div>
 `;
 
-export interface IGameBoard {
-}
-
 class GameBoard implements IComponentController, IGameBoard {
-    static $inject: string[] = ['$log', 'gameEngine'];
+    static $inject: Array<string> = ['$q', '$log', '$timeout', 'gameEngine'];
 
+    private $q: IQService;
     private gameEngine: IGameEngine;
     private $log: ILogService;
+    private $timeout: ITimeoutService;
 
-    gameBoard: Array<any> = [];
-    board: Array<any> = [];
-    clueValues = [200, 400, 600, 800, 1000];
+    categories: Array<ICategory> = [];
+    gameBoard: Array<ITile> = [];
+    clueValues: Array<number> = [200, 400, 600, 800, 1000];
 
-    constructor($log: ILogService, gameEngine: IGameEngine) {
+    constructor($q: IQService, $log: ILogService, $timeout: ITimeoutService, gameEngine: IGameEngine) {
         this.gameEngine = gameEngine;
         this.$log = $log;
+        this.$q = $q;
+        this.$timeout = $timeout;
+    }
 
+    $onInit(): void {
+        this.buildGameBoard();
+    }
 
-
+    /**
+     * Gets a list of random categories and builds a full game board.
+     */
+    buildGameBoard(): void {
         this.gameEngine.getCategories(6)
-            .then((categories) => {
-                this.gameEngine.currentCategories = categories.data;
+            .then((cats: any) => {
+                this.categories = copy(cats.data);
+                let board: Array<any> = [];
 
+                /**
+                 * Each category contains 5 dollar values [200, 400, 600, 800, 1000] <p/>
+                 * (doubled in value during 'double jeopardy')
+                 */
+                for (let i: number = 0, len: number = this.clueValues.length; i < len; i++) {
+                    let row = [];
 
+                    // each categories we construct an ITile object and add to the row.
+                    for (let j = 0, len = this.categories.length; j < len; j++) {
+                        this.categories[j].title = this.categories[j].title.trim();
 
-                for (let i = 0, len = this.gameEngine.currentCategories.length; i < len; i++) {
-                    let category = this.gameEngine.currentCategories[i];
+                        row.push({
+                            title: `\$${this.clueValues[i]}`.trim(),
+                            category: this.categories[j],
+                            value: this.clueValues[i]
+                        });
+                    }
 
-                    this.board.push({
-                        category: category,
-                        clues: this.clueValues
-                    });
+                    // the row is finished... send it to the board.
+                    board.push(row);
                 }
 
-                console.log(this.board);
+                this.gameBoard = copy(board);
+                this.$log.info('this.gameBoard: ', this.gameBoard);
             });
     }
-
-
-    builder(): void {
-        for (var i = 0; i < 5; i++) {
-
-
-
-        }
-    }
-
 }
 
 export default {

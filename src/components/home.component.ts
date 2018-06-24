@@ -1,11 +1,11 @@
 import {IComponentController, ILogService, ITimeoutService} from "angular";
-import {IGameEngine} from "../services/gameEngine.service";
+import {IGameEngine} from "../app.interfaces";
 
 let componentTemplate: string = `
 <div class="home">
     <div class="row" >
-        <div class="col-md-4">&nbsp;</div>
-        <div class="col-md-4">
+        <div class="col-2">&nbsp;</div>
+        <div class="col-8">
             <div class="title-screen" >
                 <h1>Jeopardy!</h1>
                 <div ng-if="!$ctrl.GameEngine.isGameRunning">                    
@@ -37,7 +37,7 @@ let componentTemplate: string = `
                 </div>
             </div>
         </div>
-        <div class="col-md-4">&nbsp;</div>        
+        <div class="col-2">&nbsp;</div>        
     </div>       
 </div>
 `;
