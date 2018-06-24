@@ -1,0 +1,57 @@
+@import "primary-colors";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/code";
+@import "~bootstrap/scss/grid";
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+body {
+  background-color: $dark;
+  color: $brightest;
+}
+
+.btn-primary {
+  background-color: $blue !important;
+  color: $gold;
+}
+
+.home {
+  min-height: 800px;
+}
+
+.game-board {
+  table, th, td {
+    border: solid 3px $dark !important;
+  }
+
+  th {
+    margin-bottom: 10px !important;
+  }
+
+  .spacer {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .tile {
+    font-weight: bold;
+    font-size: 12px;
+    background-color: $blue;
+    color: $gold;
+    text-align: center;
+    vertical-align: middle;
+    white-space: pre-wrap;
+    width: 75px;
+    height: 75px;
+    text-transform: capitalize;
+  }
+}
+
+.title-screen {
+  margin-top: 30%;
+  text-align: center;
+}
+

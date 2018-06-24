@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="jeopardyApp">
+<html lang="en" ng-app="jeopardyApp" ng-cloak>
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,10 +7,9 @@
         <title>Jeopardy!</title>
     </head>
     <body>
-        <h1>Jeopardy!</h1>
-        <section>
+        <div class="container">
             <ui-view></ui-view>
-        </section>
+        </div>
         <script src="vendor.js"></script>
         <script src="app.js"></script>
     </body>

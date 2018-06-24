@@ -6,15 +6,16 @@ const path = require('path'),
 module.exports = {
     mode: 'development',
     entry: {
-        app: ['./src/app.js'],
+        app: ['./src/app.ts'],
         vendor: [
             'jquery/dist/jquery.js',
+            'popper.js/dist/popper.js',
+            'tooltip.js/dist/tooltip.js',
             'underscore/underscore.js',
             'angular/angular.js',
             'angular-animate/angular-animate.js',
             'angular-sanitize/angular-sanitize.js',
-            '@uirouter/angularjs/release/angular-ui-router.js',
-            'angular-ui-bootstrap/dist/ui-bootstrap-tpls.js'
+            '@uirouter/angularjs/release/angular-ui-router.js'
         ]
     },
     context: __dirname + '',
@@ -26,14 +27,15 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
-                exclude: /(node_modules)/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['babel-preset-env']
-                    }
-                }
+                test: /\.tsx$/,
+                enforce: 'pre',
+                loader: 'tslint-loader',
+                options: { /* Loader options go here */ }
+            },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
             },
             {
                 test: /\.html$/,
@@ -47,11 +49,17 @@ module.exports = {
                 ],
             },
             {
-                test: /\.less$/,
+                test: /\.scss$/,
                 use: [
                     { loader: 'style-loader' },
-                    { loader: 'css-loader' },
-                    { loader: 'less-loader' }
+                    {
+                        loader: 'css-loader',
+                        options: { sourceMap: true }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: { sourceMap: true }
+                    }
                 ]
             },
             {
@@ -70,7 +78,7 @@ module.exports = {
         new CopyWebpackPlugin([{ from: './src/index.html', to: './index.html' }])
     ],
     resolve: {
-        extensions: ['.js']
+        extensions: [ '.tsx', '.ts', '.js' ]
     },
     devServer: {
         contentBase: path.resolve(__dirname, 'dist'),

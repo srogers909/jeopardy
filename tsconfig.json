@@ -1,0 +1,16 @@
+{
+  "outDir": "./dist/",
+  "noImplicitAny": true,
+  "sourceMap": true,
+  "module": "es6",
+  "target": "es5",
+  "removeComments": true,
+  "experimentalDecorators": true,
+  "typeRoots": ["node_modules/@types"],
+  "types": ["jquery", "underscore", "bootstrap"],
+  "allowJs": true,
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
