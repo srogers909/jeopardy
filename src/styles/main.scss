@@ -1,7 +1,5 @@
 @import "primary-colors";
 
-$font-family-base: 'Helvetica Compressed';
-
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
@@ -31,11 +29,7 @@ body {
   }
 
   table {
-    height: 600px;
-  }
-
-  th {
-    margin-bottom: 10px !important;
+    height: auto;
   }
 
   td {
