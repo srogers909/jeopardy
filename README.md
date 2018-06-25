@@ -4,7 +4,7 @@ This project originated from my desire to learn Webpack 4 including integration 
 
 Big shout out to [jService](http://jservice.io/) and the nice work at providing a pleasant jeopardy question RESTful API.
 
-<span style="color:red">WARNING:</span> This is a **Work in Progress**.  Wait for **`v1.0.0`** before expecting a reasonable playing experience.
+_<span style="color:red">WARNING:</span> This is a **Work in Progress**.  Wait for **`v1.0.0`** before expecting a reasonable playing experience._
 
 ### Requirements
 

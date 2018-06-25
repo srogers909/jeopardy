@@ -1,4 +1,4 @@
-import {IComponentController, ILogService, ITimeoutService} from "angular";
+import {IComponentController, IComponentOptions, ILogService, ITimeoutService} from "angular";
 import {IGameEngine} from "../app.interfaces";
 
 let componentTemplate: string = `
@@ -66,8 +66,14 @@ export class HomeController implements IComponentController, iHome {
     }
 }
 
-export default {
-    bindings: {},
-    controller: HomeController,
-    template: componentTemplate
+export default class HomeComponent implements IComponentOptions {
+    bindings: any;
+    controller: any;
+    template: string;
+
+    constructor() {
+        this.bindings = {};
+        this.controller = HomeController;
+        this.template = componentTemplate;
+    }
 }

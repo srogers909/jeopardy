@@ -1,5 +1,7 @@
-.idea/
-node_modules/
+/.idea/
+/node_modules/
 *.css
 *.map
-coverage/
+/coverage/
+/package-lock.json
+/dist/

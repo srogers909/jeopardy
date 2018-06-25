@@ -1,5 +1,5 @@
-import { IComponentController, ILogService, IQService, ITimeoutService, copy } from "angular";
-import { ICategory, IGameBoard, ITile, IGameEngine, IClueOptions, IClue } from "../app.interfaces";
+import {IComponentController, ILogService, IQService, ITimeoutService, copy, IComponentOptions} from "angular";
+import {ICategory, IGameBoard, ITile, IGameEngine, IClueOptions, IClue} from "../app.interfaces";
 
 let template: string = `
     <div class="game-board">
@@ -7,9 +7,9 @@ let template: string = `
             <thead>
                 <tr scope="col" class="row">
                     <th 
-                        class="col tile-header align-middle align-content-center"
+                        class="col-md tile-header align-middle align-content-center"
                         ng-repeat="category in $ctrl.categories track by category.id">
-                        <div class="header-title text-center">{{ ::category.title.trim() }}</div></th>                
+                        <div class="header-title text-center"><span>{{ ::category.title.trim() }}</span></div></th>                
                 </tr>
                 <tr><td colspan="6" class="spacer">&nbsp;</td></tr>
             </thead>                
@@ -17,9 +17,9 @@ let template: string = `
                 <tr ng-repeat="tiles in $ctrl.gameBoard track by $index" class="row">
                     <td 
                         ng-repeat="tile in tiles track by $index"
-                        class="col tile align-middle align-content-center"
+                        class="col-md tile align-middle align-content-center"
                         ng-click="$ctrl.getClue({ value: tile.value, category: tile.category.id })">
-                        <div class="tile-title text-center">{{ ::tile.title.trim() }}</div>
+                        <div class="tile-title text-center"><span>{{ ::tile.title.trim() }}</span></div>
                     </td>
                 </tr>
             </tbody>
@@ -27,26 +27,46 @@ let template: string = `
     </div>
 `;
 
+/**
+ * Game board AngularJS controller class.
+ */
 class GameBoard implements IComponentController, IGameBoard {
-    static $inject: Array<string> = ['$q', '$log', '$timeout', 'gameEngine'];
+    static $inject: Array<string> = [
+        '$q',
+        '$log',
+        '$timeout',
+        'gameEngine',
+        '$uibModal'
+    ];
 
     private $q: IQService;
     private gameEngine: IGameEngine;
     private $log: ILogService;
     private $timeout: ITimeoutService;
+    private $uibModal: any;
 
     categories: Array<ICategory> = [];
     gameBoard: Array<ITile> = [];
     clueValues: Array<number> = [200, 400, 600, 800, 1000];
     currentClue: IClue = null;
 
-    constructor($q: IQService, $log: ILogService, $timeout: ITimeoutService, gameEngine: IGameEngine) {
+    constructor(
+        $q: IQService,
+        $log: ILogService,
+        $timeout: ITimeoutService,
+        gameEngine: IGameEngine,
+        $uibModal: any
+    ) {
         this.gameEngine = gameEngine;
         this.$log = $log;
         this.$q = $q;
         this.$timeout = $timeout;
+        this.$uibModal = $uibModal;
     }
 
+    /**
+     * AngularJS initialization hook. In this case, it builds the game board.
+     */
     $onInit(): void {
         this.buildGameBoard();
     }
@@ -85,16 +105,44 @@ class GameBoard implements IComponentController, IGameBoard {
             });
     }
 
+    /**
+     * Gets a single clue by category & value.
+     * @param {IClueOptions} clue An IClueOptions object that represents the category & values chosen.
+     */
     getClue(clue: IClueOptions): void {
         this.gameEngine.getClues(clue)
             .then((response: any) => {
                 this.currentClue = response.data as IClue;
             });
+
+        this.$uibModal
+            .open({
+                animation: false,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                component: 'gameTile',
+                size: 'lg',
+                resolve: {
+                    clue: () => {
+                        return this.gameEngine.getClues(clue);
+                    }
+                }
+            })
+            .result
+            .then((selectedTile: any) => {
+                this.$log.info('selectedTile: ', selectedTile);
+            });
     }
 }
 
-export default {
-    bindings: {},
-    controller: GameBoard,
-    template: template
+export default class GameBoardComponent implements IComponentOptions {
+    bindings: any;
+    controller: any;
+    template: any;
+
+    constructor() {
+        this.bindings = {};
+        this.controller = GameBoard;
+        this.template = template;
+    }
 };

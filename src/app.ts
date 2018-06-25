@@ -8,7 +8,13 @@ import GameBoardComponent from './components/gameBoard.component';
 import GameTileComponent from './components/gameTile.component';
 
 const jeopardyApp =
-    angular.module('jeopardyApp', ['ui.router', 'ngAnimate', 'ngSanitize']);
+    angular.module('jeopardyApp', [
+        'ui.router',
+        'ui.bootstrap',
+        'ngAnimate',
+        'ngSanitize',
+        'ngTouch'
+    ]);
 
 class Configuration {
     static $inject: string[] = ['$stateProvider', '$urlRouterProvider'];
@@ -24,20 +30,23 @@ class Configuration {
                 name: 'gameBoard',
                 url: '/game-time',
                 component: 'gameBoard'
+            })
+            .state({
+                name: 'gameTile',
+                url: '/game-tile',
+                component: 'gameTile'
             });
 
         $urlRouterProvider.otherwise('/');
     }
-
-
 }
 
 jeopardyApp
     .config(Configuration)
     .service('gameEngine', GameEngine)
-    .component('homeComponent', HomeComponent)
-    .component('gameBoard', GameBoardComponent)
-    .component('gameTile', GameTileComponent);
+    .component('homeComponent', new HomeComponent)
+    .component('gameBoard', new GameBoardComponent)
+    .component('gameTile', new GameTileComponent);
 
 export default jeopardyApp;
 

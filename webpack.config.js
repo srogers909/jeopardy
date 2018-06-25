@@ -15,7 +15,9 @@ module.exports = {
             'angular/angular.js',
             'angular-animate/angular-animate.js',
             'angular-sanitize/angular-sanitize.js',
-            '@uirouter/angularjs/release/angular-ui-router.js'
+            'angular-touch/angular-touch.js',
+            '@uirouter/angularjs/release/angular-ui-router.js',
+            'angular1-ui-bootstrap4/dist/ui-bootstrap-tpls.js'
         ]
     },
     context: __dirname + '',
@@ -30,7 +32,7 @@ module.exports = {
                 test: /\.tsx$/,
                 enforce: 'pre',
                 loader: 'tslint-loader',
-                options: { /* Loader options go here */ }
+                options: {}
             },
             {
                 test: /\.tsx?$/,

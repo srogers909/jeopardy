@@ -45,20 +45,24 @@ body {
     font-weight: bold;
     font-size: 16px;
     background-color: $blue;
-    color: $gold;
+    color: $brightest;
     white-space: pre-wrap;
     text-transform: capitalize;
 
     .header-title {
       position: relative;
       top: -23px;
+
+      span {
+        text-shadow: 2px 2px $dark;
+      }
     }
   }
 
   .tile {
     padding-top: 10px !important;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 2.5rem;
     height: 150px;
     background-color: $blue;
     color: $gold;
@@ -68,7 +72,11 @@ body {
 
   .tile-title {
     position: relative;
-    top: -57px;
+    top: -90px;
+
+    span {
+      text-shadow: 3px 3px $dark;
+    }
   }
 }
 
