@@ -1,4 +1,4 @@
-import * as angular from 'angular';
+import {module} from 'angular';
 
 import './styles/main.scss';
 
@@ -8,7 +8,7 @@ import GameBoardComponent from './components/gameBoard.component';
 import GameTileComponent from './components/gameTile.component';
 
 const jeopardyApp =
-    angular.module('jeopardyApp', [
+    module('jeopardyApp', [
         'ui.router',
         'ui.bootstrap',
         'ngAnimate',
@@ -17,7 +17,7 @@ const jeopardyApp =
     ]);
 
 class Configuration {
-    static $inject: string[] = ['$stateProvider', '$urlRouterProvider'];
+    static $inject: Array<string> = ['$stateProvider', '$urlRouterProvider'];
 
     constructor($stateProvider, $urlRouterProvider) {
         $stateProvider
