@@ -1,5 +1,5 @@
-import {IComponentController, IComponentOptions, ILogService} from "angular";
-import {IGameEngine} from "../app.interfaces";
+import {IComponentController, IComponentOptions, ILogService} from 'angular';
+import {IGameEngine} from '../app.interfaces';
 
 export default class GameTileComponent implements IComponentOptions {
     bindings: any;
