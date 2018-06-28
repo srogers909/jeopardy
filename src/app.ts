@@ -1,19 +1,25 @@
 import {module} from 'angular';
+import * as uiRouter from '@uirouter/angularjs';
+import * as ngAnimate from 'angular-animate';
+import * as ngSanitize from 'angular-sanitize';
+import * as ngTouch from 'angular-touch';
+import * as uiBootstrap from 'angular1-ui-bootstrap4';
 
 import './styles/main.scss';
 
+import ConstantsService from './services/constants.service';
 import GameEngine from './services/gameEngine.service';
 import HomeComponent from './components/home.component';
 import GameBoardComponent from './components/gameBoard.component';
-import GameTileComponent from './components/gameTile.component';
+import ClueComponent from './components/clue.component';
 
 const jeopardyApp =
     module('jeopardyApp', [
-        'ui.router',
-        'ui.bootstrap',
-        'ngAnimate',
-        'ngSanitize',
-        'ngTouch'
+        uiRouter,
+        uiBootstrap,
+        ngAnimate,
+        ngSanitize,
+        ngTouch
     ]);
 
 class Configuration {
@@ -43,10 +49,11 @@ class Configuration {
 
 jeopardyApp
     .config(Configuration)
+    .service('constantsService', ConstantsService)
     .service('gameEngine', GameEngine)
     .component('homeComponent', new HomeComponent)
     .component('gameBoard', new GameBoardComponent)
-    .component('gameTile', new GameTileComponent);
+    .component('clue', new ClueComponent);
 
 export default jeopardyApp;
 

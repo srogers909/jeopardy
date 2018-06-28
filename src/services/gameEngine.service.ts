@@ -12,11 +12,17 @@ export default class GameEngine implements IGameEngine {
     isGameRunning: boolean = false;
     isDoubleJeopardy: boolean = false;
     currentCategories: Array<any>;
+    currentClue: any;
+    hasAttemptedToAnswer: boolean;
+    currentScore: number;
 
     constructor($q: IQService, $log: ILogService, $http: IHttpService) {
         this.$http = $http;
         this.$log = $log;
         this.$q = $q;
+
+        this.hasAttemptedToAnswer = false;
+        this.currentScore = 0;
     }
 
     startGame(): any {

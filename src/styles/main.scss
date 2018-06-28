@@ -14,9 +14,77 @@ body {
   color: $brightest;
 }
 
+button {
+  border-radius: 0 !important;
+}
+
+input[type=text] {
+  border-radius: 0;
+  font-weight: bold;
+}
+
+.game-area {
+}
+
+.game-tile {
+  height: 100%;
+  background-color: $blue;
+}
+
 .btn-primary {
   background-color: $blue !important;
   color: $gold;
+}
+
+.modal-content, .clue-window, clue {
+  height: 100% !important;
+}
+
+.modal-body {
+  height: calc(100% - 133px);
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+}
+
+.modal.show {
+  .modal-dialog {
+    height: calc(100% - 60px);
+  }
+}
+
+.category-title {
+  font-size: 1.6vw;
+  text-align: center;
+  color: $gold;
+  text-transform: capitalize;
+  text-shadow: 2px 2px $dark;
+}
+
+.qa-container {
+  height: calc(100% - 40px);
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 10px;
+}
+
+.question {
+  font-size: 4vw;
+  font-weight: 500;
+  color: $white;
+  text-shadow: 2px 2px $dark;
+  text-align: center;
+  width: 100%;
+}
+
+.score {
+  font-weight: 500;
+  font-size: 1.4vw;
+  color: $white;
+  text-shadow: 2px 2px $dark;
 }
 
 .home {
@@ -26,6 +94,7 @@ body {
 .game-board {
   table, th, td {
     border: solid 3px $dark !important;
+    white-space: nowrap;
   }
 
   table {
@@ -43,39 +112,45 @@ body {
 
   .tile-header {
     font-weight: bold;
-    font-size: 16px;
     background-color: $blue;
     color: $brightest;
     white-space: pre-wrap;
     text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    height: 130px;
 
-    .header-title {
-      position: relative;
-      top: -23px;
-
-      span {
-        text-shadow: 2px 2px $dark;
-      }
+    span {
+      text-shadow: 2px 2px $dark;
+      text-align: center;
+      width: 100%;
+      font-size: 1.4vw
     }
   }
 
   .tile {
-    padding-top: 10px !important;
     font-weight: bold;
-    font-size: 2.5rem;
-    height: 150px;
     background-color: $blue;
     color: $gold;
     white-space: pre-wrap;
     text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    height: 130px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: blue;
+    }
   }
 
   .tile-title {
-    position: relative;
-    top: -90px;
+    width: 100%;
 
     span {
       text-shadow: 3px 3px $dark;
+      font-size: 3.6vw;
+      width: 100%;
     }
   }
 }

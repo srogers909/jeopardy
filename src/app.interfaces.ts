@@ -8,6 +8,11 @@ export interface IGameBoard {
 
 }
 
+export interface IModalBindings {
+    modalInstance: any;
+    resolve?: any;
+}
+
 export interface ICategory {
     id: Number;
     title: String;
@@ -26,6 +31,9 @@ export interface IGameEngine {
     isGameRunning: boolean;
     isDoubleJeopardy: boolean;
     currentCategories: Array<any>;
+    currentClue: any;
+    hasAttemptedToAnswer: boolean;
+    currentScore: number;
     startGame(): any;
     getClues(options?: IClueOptions): any;
     getRandomClue(): any;

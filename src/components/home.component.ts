@@ -53,7 +53,7 @@ export class HomeController implements IComponentController, iHome {
 
     private $log: ILogService;
     private readonly $timeout: ITimeoutService;
-    private GameEngine: IGameEngine;
+    private gameEngine: IGameEngine;
     private $state: any;
 
     constructor(
@@ -65,10 +65,12 @@ export class HomeController implements IComponentController, iHome {
         this.$log = $log;
         this.$state = $state;
         this.$timeout = $timeout;
-        this.GameEngine = gameEngine;
+        this.gameEngine = gameEngine;
     }
 
     go(): any {
+        this.gameEngine.isGameRunning = true;
+
         this.$timeout(() => {
             this.$state.go('gameBoard');
         }, 0, false);

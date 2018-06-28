@@ -9,7 +9,8 @@ let template: string = `
                     <th 
                         class="col-md tile-header align-middle align-content-center"
                         ng-repeat="category in $ctrl.categories track by category.id">
-                        <div class="header-title text-center"><span>{{ ::category.title.trim() }}</span></div></th>                
+                        <span>{{ ::category.title.trim() }}</span>
+                    </th>                
                 </tr>
                 <tr><td colspan="6" class="spacer">&nbsp;</td></tr>
             </thead>                
@@ -110,17 +111,13 @@ class GameBoard implements IComponentController, IGameBoard {
      * @param {IClueOptions} clue An IClueOptions object that represents the category & values chosen.
      */
     getClue(clue: IClueOptions): void {
-        this.gameEngine.getClues(clue)
-            .then((response: any) => {
-                this.currentClue = response.data as IClue;
-            });
-
         this.$uibModal
             .open({
                 animation: false,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                component: 'gameTile',
+                windowClass: 'clue-window',
+                component: 'clue',
                 size: 'lg',
                 resolve: {
                     clue: () => {
@@ -132,6 +129,10 @@ class GameBoard implements IComponentController, IGameBoard {
             .then((selectedTile: any) => {
                 this.$log.info('selectedTile: ', selectedTile);
             });
+    }
+
+    $onDestroy(): void {
+        this.gameEngine.isGameRunning = false;
     }
 }
 
