@@ -1,5 +1,5 @@
 import {module} from 'angular';
-import * as uiRouter from '@uirouter/angularjs';
+import uiRouter from '@uirouter/angularjs';
 import * as ngAnimate from 'angular-animate';
 import * as ngSanitize from 'angular-sanitize';
 import * as ngTouch from 'angular-touch';
@@ -36,11 +36,6 @@ class Configuration {
                 name: 'gameBoard',
                 url: '/game-time',
                 component: 'gameBoard'
-            })
-            .state({
-                name: 'gameTile',
-                url: '/game-tile',
-                component: 'gameTile'
             });
 
         $urlRouterProvider.otherwise('/');
@@ -49,7 +44,7 @@ class Configuration {
 
 jeopardyApp
     .config(Configuration)
-    .service('constantsService', ConstantsService)
+    .service('constants', ConstantsService)
     .service('gameEngine', GameEngine)
     .component('homeComponent', new HomeComponent)
     .component('gameBoard', new GameBoardComponent)

@@ -94,11 +94,10 @@ input[type=text] {
 .game-board {
   table, th, td {
     border: solid 3px $dark !important;
-    white-space: nowrap;
   }
 
   table {
-    height: auto;
+
   }
 
   td {

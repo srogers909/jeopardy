@@ -13,13 +13,13 @@ export default class HomeComponent implements IComponentOptions {
             <div class="home">    
                 <div class="title-screen" >
                     <h1>Jeopardy!</h1>
-                    <div ng-if="!$ctrl.GameEngine.isGameRunning">                    
+                    <div ng-if="!$ctrl.gameEngine.isGameRunning">                    
                         <p>A game made with love using AngularJS, Webpack & Typescript.</p>
                         <button
                             class="btn btn-primary"
-                            ng-click="$ctrl.GameEngine.startGame()">Start Game</button>
+                            ng-click="$ctrl.gameEngine.startGame()">Start Game</button>
                     </div>
-                    <div ng-if="$ctrl.GameEngine.isGameRunning">
+                    <div ng-if="$ctrl.gameEngine.isGameRunning">
                         <ng-form
                             name="nameForm"
                             id="nameForm"
@@ -29,7 +29,7 @@ export default class HomeComponent implements IComponentOptions {
                                 <input
                                     type="text"
                                     class="form-control"
-                                    ng-model="$ctrl.GameEngine.Name"
+                                    ng-model="$ctrl.gameEngine.Name"
                                     placeholder="Enter your name"
                                     required />
                                 <span class="input-group-btn">
@@ -45,10 +45,7 @@ export default class HomeComponent implements IComponentOptions {
     }
 }
 
-export interface iHome {
-}
-
-export class HomeController implements IComponentController, iHome {
+export class HomeController implements IComponentController {
     static $inject: string[] = ['$log', 'gameEngine', '$state', '$timeout'];
 
     private $log: ILogService;
@@ -69,6 +66,7 @@ export class HomeController implements IComponentController, iHome {
     }
 
     go(): any {
+
         this.gameEngine.isGameRunning = true;
 
         this.$timeout(() => {

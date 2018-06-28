@@ -1,6 +1,6 @@
 import {IComponentController, IComponentOptions, ILogService} from 'angular';
-import {ConstantsService} from "../services/constants.service";
-import { IGameEngine, IModalBindings } from '../app.interfaces';
+import {IGameEngine, IModalBindings} from '../app.interfaces';
+import { IConstantsService } from "../services/constants.service";
 
 export default class ClueComponent implements IComponentOptions {
     bindings: any;
@@ -18,7 +18,8 @@ export default class ClueComponent implements IComponentOptions {
                 <div class="modal-header row">                
                     <div class="category-title col-3">Category: {{::$ctrl.gameEngine.currentClue.category.title}}</div>
                     <div class="col-6">
-                        <span ng-if="$ctrl.answerStatus"></span>
+                        <span class="alert-success" ng-if="$ctrl.answerStatus === $ctrl.constants.CORRECT">CORRECT ANSWER!</span>
+                        <span class="alert-danger" ng-if="$ctrl.answerStatus === $ctrl.constants.INCORRECT">INCORRECT ANSWER</span>
                     </div>
                     <div class="score col-3">Score: \${{::$ctrl.gameEngine.currentScore}}</div>
                 </div>
@@ -48,29 +49,30 @@ export default class ClueComponent implements IComponentOptions {
 class Clue implements IComponentController, IModalBindings {
     static readonly $inject: string[] = [
         '$log',
-        'constantsService',
+        'constants',
         'gameEngine'
     ];
 
     private $log: ILogService;
     private gameEngine: IGameEngine;
+    private constants: IConstantsService;
     private log: any;
 
     modalInstance: any;
     resolve: any;
     answer: string;
-    answerStatus: boolean;
+    answerStatus: number;
 
     constructor(
         $log: ILogService,
-        constantsService: any,
+        constants: IConstantsService,
         gameEngine: IGameEngine
     ) {
         this.$log = $log;
         this.gameEngine = gameEngine;
         this.answer = null;
         this.log = this.$log.info;
-        this.answerStatus = null;
+        this.answerStatus = this.constants.NO_ANSWER;
     }
 
     lowerTrim(answer: string): string {
@@ -91,7 +93,7 @@ class Clue implements IComponentController, IModalBindings {
 
         if (correctAnswer === finalAnswer) {
             this.gameEngine.currentScore += this.gameEngine.currentClue.value;
-            this.answerStatus = true;
+            this.answerStatus = this.constants.CORRECT;
         } else {
             this.gameEngine.currentScore -= this.gameEngine.currentClue.value;
         }

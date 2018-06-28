@@ -1,6 +1,7 @@
 import {IComponentController, ILogService, IQService, ITimeoutService, copy, IComponentOptions} from "angular";
 import {ICategory, IGameBoard, ITile, IGameEngine, IClueOptions, IClue} from "../app.interfaces";
 
+// TODO: Convert this to a Flex layout with Bootstrap 4.
 let template: string = `
     <div class="game-board">
         <table class="table">

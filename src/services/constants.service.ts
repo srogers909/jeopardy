@@ -1,11 +1,17 @@
-export default class ConstantsService {
-    answerStatus: any;
+export interface IConstantsService {
+    NO_ANSWER: number;
+    CORRECT: number;
+    WRONG: number;
+}
+
+export default class ConstantsService implements IConstantsService {
+    NO_ANSWER: number;
+    CORRECT: number;
+    WRONG: number;
 
     constructor() {
-        this.answerStatus = {
-            'NO_ANSWER': 0,
-            'CORRECT': 1,
-            'WRONG': 2,
-        }
+        this.NO_ANSWER = 0;
+        this.CORRECT = 1;
+        this.WRONG = 2;
     }
 }
