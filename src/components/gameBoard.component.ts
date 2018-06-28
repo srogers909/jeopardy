@@ -3,12 +3,12 @@ import {ICategory, IGameBoard, ITile, IGameEngine, IClueOptions, IClue} from "..
 
 // TODO: Convert this to a Flex layout with Bootstrap 4.
 let template: string = `
-    <div class="game-board">
+    <div class="game-board">    
         <table class="table">
             <thead>
                 <tr scope="col" class="row">
                     <th 
-                        class="col-md tile-header align-middle align-content-center"
+                        class="col-md tile-header align-middle align-content-center flex-ellipsis"
                         ng-repeat="category in $ctrl.categories track by category.id">
                         <span>{{ ::category.title.trim() }}</span>
                     </th>                
@@ -19,7 +19,7 @@ let template: string = `
                 <tr ng-repeat="tiles in $ctrl.gameBoard track by $index" class="row">
                     <td 
                         ng-repeat="tile in tiles track by $index"
-                        class="col-md tile align-middle align-content-center"
+                        class="col-md tile align-middle align-content-center flex-ellipsis"
                         ng-click="$ctrl.getClue({ value: tile.value, category: tile.category.id })">
                         <div class="tile-title text-center"><span>{{ ::tile.title.trim() }}</span></div>
                     </td>

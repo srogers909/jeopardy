@@ -68,6 +68,7 @@ class Clue implements IComponentController, IModalBindings {
         constants: IConstantsService,
         gameEngine: IGameEngine
     ) {
+        this.constants = constants;
         this.$log = $log;
         this.gameEngine = gameEngine;
         this.answer = null;
