@@ -32,9 +32,7 @@ class Tile implements IComponentController {
     }
 
     getClue(): void {
-        this.gameEngine.tilesPlayed++;
-
-        this.$log.info('this.category: ', this.category);
+        this.gameEngine.tilesPlayed += 1;
 
         this.$uibModal
             .open({
