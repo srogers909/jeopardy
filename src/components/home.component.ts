@@ -23,13 +23,12 @@ export default class HomeComponent implements IComponentOptions {
                         <ng-form
                             name="nameForm"
                             id="nameForm"
-                            novalidate>
-                            
+                            novalidate>                            
                             <div class="input-group">
                                 <input
                                     type="text"
                                     class="form-control"
-                                    ng-model="$ctrl.gameEngine.Name"
+                                    ng-model="$ctrl.gameEngine.playerName"
                                     placeholder="Enter your name"
                                     required />
                                 <span class="input-group-btn">
@@ -65,8 +64,11 @@ export class HomeController implements IComponentController {
         this.gameEngine = gameEngine;
     }
 
-    go(): any {
+    $onInit(): void {
+        this.gameEngine.resetGame();
+    }
 
+    go(): any {
         this.gameEngine.isGameRunning = true;
 
         this.$timeout(() => {

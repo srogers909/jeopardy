@@ -1,7 +1,8 @@
 export interface ITile {
-    title: String;
-    category: Object;
-    value: Number;
+    title: string;
+    category: object;
+    value: number;
+    isActive: boolean
 }
 
 export interface IGameBoard {
@@ -14,9 +15,9 @@ export interface IModalBindings {
 }
 
 export interface ICategory {
-    id: Number;
-    title: String;
-    clues_count?: Number;
+    id: number;
+    title: string;
+    clues_count?: number;
 }
 
 export interface IClue {
@@ -29,16 +30,21 @@ export interface IClue {
 
 export interface IGameEngine {
     isGameRunning: boolean;
+    isRoundOver: boolean;
     isDoubleJeopardy: boolean;
-    currentCategories: Array<any>;
+    isFinalJeopardy: boolean;
     currentClue: any;
     hasAttemptedToAnswer: boolean;
     currentScore: number;
+    tilesPlayed: number;
     startGame(): any;
-    getClues(options?: IClueOptions): any;
+    buildGameBoard(): void;
+    getClues(value: number, category: number): any;
     getRandomClue(): any;
     getCategories(count: number): any;
     getCategory(id: number): any;
+    roundOver(): void;
+    resetGame(): void;
 }
 
 export interface IClueOptions {

@@ -12,6 +12,7 @@ import GameEngine from './services/gameEngine.service';
 import HomeComponent from './components/home.component';
 import GameBoardComponent from './components/gameBoard.component';
 import ClueComponent from './components/clue.component';
+import TileComponent from './components/tile.component';
 
 const jeopardyApp =
     module('jeopardyApp', [
@@ -47,6 +48,7 @@ jeopardyApp
     .service('constants', ConstantsService)
     .service('gameEngine', GameEngine)
     .component('homeComponent', new HomeComponent)
+    .component('tile', new TileComponent)
     .component('gameBoard', new GameBoardComponent)
     .component('clue', new ClueComponent);
 
