@@ -36,6 +36,7 @@ export interface IGameEngine {
     currentClue: any;
     hasAttemptedToAnswer: boolean;
     currentScore: number;
+    previousScore: number;
     tilesPlayed: number;
     startGame(): any;
     buildGameBoard(): void;

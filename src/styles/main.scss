@@ -1,5 +1,6 @@
 @import "primary-colors";
 
+@import "~animate.css/animate.css";
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
@@ -141,6 +142,7 @@ input[type=text] {
     display: flex;
     align-items: center;
     height: 120px;
+
 
     span {
       text-shadow: 2px 2px $dark;

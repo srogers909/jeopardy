@@ -1,4 +1,4 @@
-import {IComponentController, IComponentOptions, ILogService, ISCEService} from 'angular';
+import {IComponentController, IComponentOptions, ILogService, ISCEService, IScope} from 'angular';
 import {IGameEngine, IModalBindings} from '../app.interfaces';
 import {IConstantsService} from "../services/constants.service";
 
@@ -28,10 +28,13 @@ export default class ClueComponent implements IComponentOptions {
                     </div>
                     <div class="modal-body">
                         <div class="qa-container row">                        
-                            <p class="col-12 question">{{$ctrl.gameEngine.currentClue.question}}</p>
+                            <p class="col-12 question">{{::$ctrl.gameEngine.currentClue.question}}</p>
                             <p class="col-12 answer">
-                                <span ng-if="$ctrl.gameEngine.hasAttemptedToAnswer" ng-cloak>
-                                    {{$ctrl.gameEngine.currentClue.answer}}
+                                <span 
+                                    ng-if="$ctrl.gameEngine.hasAttemptedToAnswer"
+                                    ng-class="{" 
+                                    ng-cloak>
+                                    {{::$ctrl.gameEngine.currentClue.answer}}
                                 </span>
                             </p>       
                         </div>             
@@ -65,17 +68,18 @@ export default class ClueComponent implements IComponentOptions {
 
 class Clue implements IComponentController, IModalBindings {
     static readonly $inject: string[] = [
+        '$scope',
         '$log',
         '$sce',
         'constants',
         'gameEngine'
     ];
 
+    private $scope: IScope;
     private $log: ILogService;
     private $sce: ISCEService;
     private gameEngine: IGameEngine;
     private constants: IConstantsService;
-    private log: any;
 
     modalInstance: any;
     resolve: any;
@@ -83,17 +87,18 @@ class Clue implements IComponentController, IModalBindings {
     answerStatus: number;
 
     constructor(
+        $scope: IScope,
         $log: ILogService,
         $sce: ISCEService,
         constants: IConstantsService,
         gameEngine: IGameEngine
     ) {
+        this.$scope = $scope;
         this.constants = constants;
         this.$log = $log;
         this.$sce = $sce;
         this.gameEngine = gameEngine;
         this.answer = null;
-        this.log = this.$log.info;
         this.answerStatus = this.constants.NO_ANSWER;
     }
 
@@ -102,8 +107,8 @@ class Clue implements IComponentController, IModalBindings {
             this.$log.error('Error: ', this.resolve);
             this.cancel();
         }
-
-        this.gameEngine.currentClue = this.resolve.clue.data[0]; //just get the first one...
+        //just get the first one...
+        this.gameEngine.currentClue = this.resolve.clue.data[0];
         this.$log.info('this.gameEngine.currentClue: ', this.gameEngine.currentClue);
     };
 
@@ -112,6 +117,8 @@ class Clue implements IComponentController, IModalBindings {
 
         let correctAnswer: string = this.gameEngine.currentClue.answer.toLowerCase().trim();
         let finalAnswer: string = (this.answer) ? this.$sce.trustAsHtml(this.answer.toLowerCase().trim()) : null;
+
+        this.gameEngine.previousScore = this.gameEngine.currentScore;
 
         if (correctAnswer === finalAnswer) {
             this.gameEngine.currentScore += this.gameEngine.currentClue.value;
@@ -125,14 +132,17 @@ class Clue implements IComponentController, IModalBindings {
     toggleAnswerStatus(): void {
         this.gameEngine.hasAttemptedToAnswer = true;
 
-        if (this.answerStatus === this.constants.WRONG) {
-            this.gameEngine.currentScore += this.gameEngine.currentClue.value * 2;
-        } else {
-            this.gameEngine.currentScore += this.gameEngine.currentClue.value;
+        switch (this.answerStatus) {
+            case this.constants.CORRECT:
+                this.gameEngine.currentScore = this.gameEngine.previousScore - this.gameEngine.currentClue.value;
+                this.answerStatus = this.constants.WRONG;
+                break;
+            case this.constants.WRONG:
+            default:
+                this.gameEngine.currentScore = this.gameEngine.previousScore + this.gameEngine.currentClue.value;
+                this.answerStatus = this.constants.CORRECT;
+                break;
         }
-
-        this.answerStatus =
-            (this.answerStatus === this.constants.CORRECT) ? this.constants.WRONG : this.constants.CORRECT;
     }
 
     resetClue(): void {

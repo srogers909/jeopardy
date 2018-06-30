@@ -20,6 +20,7 @@ export default class GameEngine implements IGameEngine {
     currentClue: any;
     hasAttemptedToAnswer: boolean;
     currentScore: number;
+    previousScore: number;
     tilesPlayed: number;
     playerName: string;
     currentBoard: Array<any>;
@@ -106,7 +107,7 @@ export default class GameEngine implements IGameEngine {
     }
 
     getCategories(count: number): IPromise<any> {
-        return this.$http.get(`${this.HOST}/categories?count=${count}&offset=${Math.floor((Math.random() * 2000) + 1)}`);
+        return this.$http.get(`${this.HOST}/categories?count=${count}&offset=${Math.floor((Math.random() * 2500) + 1)}`);
     }
 
     getCategory(id: number): IPromise<any> {
@@ -129,10 +130,13 @@ export default class GameEngine implements IGameEngine {
 
         if (this.isRoundOver && this.isDoubleJeopardy) {
             this.currentRound = this.constants.ROUNDS.FINAL_JEOPARDY;
+            this.buildGameBoard();
         }
 
-        this.buildGameBoard();
+
     }
+
+
 
     markAllAnswers(answerStatus: any): void {
 
@@ -146,6 +150,7 @@ export default class GameEngine implements IGameEngine {
         this.currentBoard = [];
         this.isGameRunning = false;
         this.currentScore = 0;
+        this.previousScore = 0;
         this.tilesPlayed = 0;
         this.hasAttemptedToAnswer = false;
         this.playerName = (!this.playerName) ? 'Player 1' : this.playerName;

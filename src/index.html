@@ -9,11 +9,15 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col"></div>
+                <div class="col">
+                    <ui-view name="leftCol"></ui-view>
+                </div>
                 <div class="col-9 game-area">
                     <ui-view></ui-view>
                 </div>
-                <div class="col"></div>
+                <div class="col">
+                    <ui-view name="rightCol"></ui-view>
+                </div>
             </div>
         </div>
         <script src="vendor.js"></script>
