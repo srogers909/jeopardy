@@ -9,10 +9,12 @@ import './styles/main.scss';
 
 import ConstantsService from './services/constants.service';
 import GameEngine from './services/gameEngine.service';
+import HistoryEngine from './services/historyEngine.service';
 import HomeComponent from './components/home.component';
 import GameBoardComponent from './components/gameBoard.component';
 import ClueComponent from './components/clue.component';
 import TileComponent from './components/tile.component';
+import ScoreboardComponent from "./components/scoreboard.component";
 
 const jeopardyApp =
     module('jeopardyApp', [
@@ -24,9 +26,11 @@ const jeopardyApp =
     ]);
 
 class Configuration {
-    static $inject: Array<string> = ['$stateProvider', '$urlRouterProvider'];
+    static $inject: Array<string> = ['$stateProvider', '$urlRouterProvider', '$compileProvider'];
 
-    constructor($stateProvider, $urlRouterProvider) {
+    constructor($stateProvider, $urlRouterProvider, $compileProvider) {
+        $compileProvider.debugInfoEnabled(true);
+
         $stateProvider
             .state({
                 name: 'home',
@@ -36,7 +40,12 @@ class Configuration {
             .state({
                 name: 'gameBoard',
                 url: '/game-time',
-                component: 'gameBoard'
+                component: 'gameBoard',
+            })
+            .state('scoreBoard', {
+                views: {
+                    'top': 'scoreBoard'
+                }
             });
 
         $urlRouterProvider.otherwise('/');
@@ -47,9 +56,11 @@ jeopardyApp
     .config(Configuration)
     .service('constants', ConstantsService)
     .service('gameEngine', GameEngine)
+    .service('historyEngine', HistoryEngine)
     .component('homeComponent', new HomeComponent)
     .component('tile', new TileComponent)
     .component('gameBoard', new GameBoardComponent)
+    .component('scoreBoard', new ScoreboardComponent)
     .component('clue', new ClueComponent);
 
 export default jeopardyApp;

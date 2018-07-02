@@ -1,0 +1,23 @@
+.scoreboard {
+  color: $white;
+  text-align: center;
+  font-size: 1.9vw !important;
+  align-items: center;
+  height: 50px;
+
+  .round {
+
+    text-transform: capitalize;
+  }
+
+  .player-name {
+    text-transform: capitalize;
+    color: $gold;
+  }
+
+  .score {
+    font-weight: 600;
+    color: $white;
+    text-shadow: 2px 2px $dark;
+  }
+}

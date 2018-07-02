@@ -65,7 +65,7 @@ export class HomeController implements IComponentController {
     }
 
     $onInit(): void {
-        this.gameEngine.resetGame();
+        this.gameEngine.initializeGame();
     }
 
     go(): any {

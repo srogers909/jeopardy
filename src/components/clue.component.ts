@@ -1,6 +1,13 @@
-import {IComponentController, IComponentOptions, ILogService, ISCEService, IScope} from 'angular';
+import { IComponentController, IComponentOptions, ILogService, ISCEService, IScope, IWindowService, element } from 'angular';
 import {IGameEngine, IModalBindings} from '../app.interfaces';
 import {IConstantsService} from "../services/constants.service";
+import { IHistoryEngine } from "../services/historyEngine.service";
+
+let _window: any = window;
+
+_window['clue'] = () => {
+    return element($('.clueForm')).scope();
+};
 
 export default class ClueComponent implements IComponentOptions {
     bindings: any;
@@ -32,7 +39,6 @@ export default class ClueComponent implements IComponentOptions {
                             <p class="col-12 answer">
                                 <span 
                                     ng-if="$ctrl.gameEngine.hasAttemptedToAnswer"
-                                    ng-class="{" 
                                     ng-cloak>
                                     {{::$ctrl.gameEngine.currentClue.answer}}
                                 </span>
@@ -49,10 +55,11 @@ export default class ClueComponent implements IComponentOptions {
                         <button
                             class="btn btn-dark float-left"
                             type="button"
-                            ng-click="$ctrl.toggleAnswerStatus()">
-                            <span ng-if="$ctrl.answerStatus === $ctrl.constants.CORRECT">Mark as Incorrect</span>    
+                            ng-disabled="$ctrl.answerStatus === $ctrl.constants.CORRECT"
+                            ng-click="$ctrl.toggleAnswerStatus()">   
                             <span ng-if="$ctrl.answerStatus !== $ctrl.constants.CORRECT">Mark as Correct</span>    
-                        </button>                    
+                            <span ng-if="$ctrl.answerStatus === $ctrl.constants.CORRECT">Answer Correct</span>    
+                        </button>
                         <button
                             class="btn btn-success" 
                             type="button" 
@@ -72,7 +79,8 @@ class Clue implements IComponentController, IModalBindings {
         '$log',
         '$sce',
         'constants',
-        'gameEngine'
+        'gameEngine',
+        'historyEngine'
     ];
 
     private $scope: IScope;
@@ -80,6 +88,7 @@ class Clue implements IComponentController, IModalBindings {
     private $sce: ISCEService;
     private gameEngine: IGameEngine;
     private constants: IConstantsService;
+    private historyEngine: IHistoryEngine;
 
     modalInstance: any;
     resolve: any;
@@ -91,25 +100,26 @@ class Clue implements IComponentController, IModalBindings {
         $log: ILogService,
         $sce: ISCEService,
         constants: IConstantsService,
-        gameEngine: IGameEngine
+        gameEngine: IGameEngine,
+        historyEngine: IHistoryEngine
     ) {
         this.$scope = $scope;
         this.constants = constants;
         this.$log = $log;
         this.$sce = $sce;
         this.gameEngine = gameEngine;
+        this.historyEngine = historyEngine;
         this.answer = null;
         this.answerStatus = this.constants.NO_ANSWER;
     }
 
     $onInit(): void {
         if (!this.resolve.clue.data[0]) {
-            this.$log.error('Error: ', this.resolve);
+            this.$log.error('ERROR: ', this.resolve);
             this.cancel();
         }
         //just get the first one...
         this.gameEngine.currentClue = this.resolve.clue.data[0];
-        this.$log.info('this.gameEngine.currentClue: ', this.gameEngine.currentClue);
     };
 
     attemptAnswer(): void {
@@ -118,31 +128,27 @@ class Clue implements IComponentController, IModalBindings {
         let correctAnswer: string = this.gameEngine.currentClue.answer.toLowerCase().trim();
         let finalAnswer: string = (this.answer) ? this.$sce.trustAsHtml(this.answer.toLowerCase().trim()) : null;
 
-        this.gameEngine.previousScore = this.gameEngine.currentScore;
-
         if (correctAnswer === finalAnswer) {
-            this.gameEngine.currentScore += this.gameEngine.currentClue.value;
+            this.gameEngine.addScore();
             this.answerStatus = this.constants.CORRECT;
+            this.historyEngine.addHistoryItem(this.constants.HISTORY_TYPE.GAIN_SCORE);
         } else {
-            this.gameEngine.currentScore -= this.gameEngine.currentClue.value;
+            this.gameEngine.subtractScore();
             this.answerStatus = this.constants.WRONG;
+            this.historyEngine.addHistoryItem(this.constants.HISTORY_TYPE.LOSS_SCORE);
         }
     }
 
     toggleAnswerStatus(): void {
-        this.gameEngine.hasAttemptedToAnswer = true;
+        this.answerStatus = this.constants.CORRECT;
 
-        switch (this.answerStatus) {
-            case this.constants.CORRECT:
-                this.gameEngine.currentScore = this.gameEngine.previousScore - this.gameEngine.currentClue.value;
-                this.answerStatus = this.constants.WRONG;
-                break;
-            case this.constants.WRONG:
-            default:
-                this.gameEngine.currentScore = this.gameEngine.previousScore + this.gameEngine.currentClue.value;
-                this.answerStatus = this.constants.CORRECT;
-                break;
+        if (this.gameEngine.hasAttemptedToAnswer) {
+            this.gameEngine.currentScore = this.gameEngine.previousScore + this.gameEngine.currentClue.value;
+        } else {
+            this.gameEngine.addScore();
         }
+
+        this.gameEngine.hasAttemptedToAnswer = true;
     }
 
     resetClue(): void {

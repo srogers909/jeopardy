@@ -11,7 +11,7 @@
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
 body {
-  background-color: $dark;
+  background-color: $dark !important;
   color: $brightest;
 }
 
@@ -95,18 +95,6 @@ input[type=text] {
   font-weight: 600;
 }
 
-.scoreboard {
-  color: $white;
-  text-align: center;
-}
-
-.score {
-  font-weight: 500;
-  font-size: 1.3vw;
-  color: $white;
-  text-shadow: 2px 2px $dark;
-}
-
 .home {
   min-height: 800px;
 }
@@ -183,4 +171,6 @@ input[type=text] {
   margin-top: 30%;
   text-align: center;
 }
+
+@import "scoreboard";
 

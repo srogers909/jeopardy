@@ -1,21 +1,12 @@
-import {IComponentController, IComponentOptions} from "angular";
+import { IComponentController, IComponentOptions, ILogService } from "angular";
 import {IGameBoard, IGameEngine} from "../app.interfaces";
+import { IHistoryEngine } from "../services/historyEngine.service";
+import { IConstantsService } from "../services/constants.service";
 
 // TODO: Convert this to a Flex layout with Bootstrap 4.
 let template: string = `
     <div class="game-board">    
-        <div class="scoreboard">
-            <div class="row">
-                <div class="col-2"></div>
-                <div class="col-4">
-                    Player: {{ $ctrl.gameEngine.playerName }}
-                </div>
-                <div class="col-4">
-                    Score: \${{ $ctrl.gameEngine.currentScore }}
-                </div>
-                <div class="col-2"></div>
-            </div>            
-        </div>
+        <score-board></score-board>
         <table class="table">
             <thead>
                 <tr scope="col" class="row">
@@ -46,16 +37,33 @@ let template: string = `
  * Game board AngularJS controller class.
  */
 class GameBoard implements IComponentController, IGameBoard {
-    static $inject: Array<string> = ['gameEngine'];
+    static $inject: Array<string> = [
+        '$log',
+        'constants',
+        'gameEngine',
+        'historyEngine'
+    ];
 
+    private $log: ILogService;
+    private constants: IConstantsService;
     private gameEngine: IGameEngine;
+    private historyEngine: IHistoryEngine;
 
-    constructor(gameEngine: IGameEngine) {
+    constructor(
+        $log: ILogService,
+        constants: IConstantsService,
+        gameEngine: IGameEngine,
+        historyEngine: IHistoryEngine
+    ) {
+        this.$log = $log;
+        this.constants = constants;
         this.gameEngine = gameEngine;
+        this.historyEngine = historyEngine;
     }
 
     $onInit(): void {
         this.gameEngine.buildGameBoard();
+        this.historyEngine.addHistoryItem(this.constants.HISTORY_TYPE.GAME_START);
     }
 
     $onDestroy(): void {

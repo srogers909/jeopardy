@@ -11,6 +11,7 @@ class Tile implements IComponentController {
 
     category: any = null;
     value: number = null;
+    type: number = 0;
 
     private isActive: boolean = true;
 
@@ -32,6 +33,8 @@ class Tile implements IComponentController {
     }
 
     getClue(): void {
+        if (this.type !== 0) return;
+
         this.gameEngine.tilesPlayed += 1;
 
         this.$uibModal

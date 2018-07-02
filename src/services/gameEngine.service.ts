@@ -1,3 +1,4 @@
+
 import {IHttpService, ILogService, IQService, IPromise, copy} from "angular";
 import {IGameEngine, ICategory, IGameBoard} from "../app.interfaces";
 import {IConstantsService} from "./constants.service";
@@ -19,8 +20,8 @@ export default class GameEngine implements IGameEngine {
     currentRound: any;
     currentClue: any;
     hasAttemptedToAnswer: boolean;
-    currentScore: number;
     previousScore: number;
+    currentScore: number;
     tilesPlayed: number;
     playerName: string;
     currentBoard: Array<any>;
@@ -37,18 +38,23 @@ export default class GameEngine implements IGameEngine {
         this.$log = $log;
         this.$q = $q;
         this.constants = constants;
-        this.clueValues = [200, 400, 600, 800, 1000];
 
-        this.resetGame();
+        this.initializeGame();
     }
 
     startGame(): any {
         this.isGameRunning = true;
+        this.$log.info('EVENT: Game started');
     }
 
     buildGameBoard(): void {
         this.getCategories(6)
             .then((cats: any) => {
+                if (!cats) {
+                    this.$log.error('EVENT: Categories not retrieved.');
+                    return;
+                }
+
                 let _categories = copy(cats.data);
                 let board: Array<any> = [];
 
@@ -68,14 +74,14 @@ export default class GameEngine implements IGameEngine {
                         });
                     }
 
-                    this.$log.info('row: ', row);
-
                     // the row is finished... send it to the board.
                     board.push(row);
                 }
 
                 this.categories = copy(_categories);
                 this.gameBoard = copy(board);
+
+                this.$log.info('EVENT: Categories retrieved and game board built');
             });
     }
 
@@ -86,8 +92,6 @@ export default class GameEngine implements IGameEngine {
     // offset(int): offsets the returned clues. Useful in pagination
     getClues(value: number = null, category: number = null): IPromise<any> {
         let url: string = `${this.HOST}/clues`;
-
-        this.$log.info('category: ', category);
 
         if (value || category) {
             url += '?';
@@ -114,9 +118,21 @@ export default class GameEngine implements IGameEngine {
         return this.$http.get(`${this.HOST}/category?id=${id}`);
     }
 
-    roundOver(): void {
-        this.$log.info('this.isRoundOver: ', this.isRoundOver);
+    addScore(): void {
+        this.currentScore += this.currentClue.value;
+        this.previousScore = this.currentScore;
 
+        this.$log.info('EVENT: Score added - ', this.currentScore);
+    }
+
+    subtractScore(): void {
+        this.currentScore -= this.currentClue.value;
+        this.previousScore = this.currentScore;
+
+        this.$log.info('EVENT: Score subtracted - ', this.currentScore);
+    }
+
+    roundOver(): void {
         if (this.isRoundOver && (this.currentRound === this.constants.ROUNDS.JEOPARDY)) {
             let clues: any = copy(this.clueValues);
 
@@ -126,23 +142,19 @@ export default class GameEngine implements IGameEngine {
             }
 
             this.clueValues = clues;
+
+            this.$log.info('EVENT: Round changed to "Double Jeopardy"');
         }
 
         if (this.isRoundOver && this.isDoubleJeopardy) {
             this.currentRound = this.constants.ROUNDS.FINAL_JEOPARDY;
-            this.buildGameBoard();
+            //this.buildGameBoard();
+
+            this.$log.info('EVENT: Round changed to "Final Jeopardy"');
         }
-
-
     }
 
-
-
-    markAllAnswers(answerStatus: any): void {
-
-    }
-
-    resetGame(): void {
+    initializeGame(): void {
         this.currentRound = this.constants.ROUNDS.JEOPARDY;
         this.isRoundOver = false;
         this.isDoubleJeopardy = false;
@@ -150,9 +162,9 @@ export default class GameEngine implements IGameEngine {
         this.currentBoard = [];
         this.isGameRunning = false;
         this.currentScore = 0;
-        this.previousScore = 0;
         this.tilesPlayed = 0;
         this.hasAttemptedToAnswer = false;
         this.playerName = (!this.playerName) ? 'Player 1' : this.playerName;
+        this.clueValues = [200, 400, 600, 800, 1000];
     }
 }
