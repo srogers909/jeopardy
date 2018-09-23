@@ -55,7 +55,6 @@ class Tile implements IComponentController {
             .result
             .catch(() => {
                 this.isActive = false;
-                this.gameEngine.roundOver();
             });
     }
 }

@@ -104,10 +104,6 @@ input[type=text] {
     border: solid 3px $dark !important;
   }
 
-  table {
-
-  }
-
   td {
     padding: 0 !important;
   }
@@ -152,7 +148,7 @@ input[type=text] {
     cursor: pointer;
 
     &:hover {
-      background-color: blue;
+      background-color: $blue;
     }
   }
 
@@ -162,7 +158,7 @@ input[type=text] {
 
     span {
       text-shadow: 3px 3px $dark;
-      font-size: 2.9vw;
+      font-size: 2.2vw;
     }
   }
 }

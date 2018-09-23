@@ -1,7 +1,6 @@
 const path = require('path'),
     webpack = require('webpack'),
-    CopyWebpackPlugin = require('copy-webpack-plugin'),
-    CleanWebpackPlugin = require('clean-webpack-plugin');
+    CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -29,15 +28,11 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.tsx$/,
-                enforce: 'pre',
-                loader: 'tslint-loader',
-                options: {}
-            },
-            {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/
+                use: ['ts-loader'],
+                exclude: [
+                    '/node_modules/',
+                ]
             },
             {
                 test: /\.html$/,
@@ -75,16 +70,26 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(['dist']),
-        new webpack.optimize.SplitChunksPlugin({ name: 'vendor', filename: 'vendor.js' }),
-        new CopyWebpackPlugin([{ from: './src/index.html', to: './index.html' }])
+        new webpack.optimize.SplitChunksPlugin(
+            {
+                name: 'vendor',
+                filename: 'vendor.js'
+            }
+        ),
+        new CopyWebpackPlugin([{ from: './src/index.html', to: './index.html' }]),
+        new webpack.HotModuleReplacementPlugin()
     ],
     resolve: {
-        extensions: [ '.tsx', '.ts', '.js' ]
+        extensions: [ '.tsx', '.ts', '.js' ],
+        alias: {
+            'angular': path.resolve(path.join(__dirname, 'node_modules', 'angular'))
+        },
     },
     devServer: {
         contentBase: path.resolve(__dirname, 'dist'),
         compress: true,
-        port: 9001
+        port: 9001,
+        hot: true,
+        inline: true
     },
 };

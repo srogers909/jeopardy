@@ -7,10 +7,6 @@ export default class GameEngine implements IGameEngine {
     static $inject: string[] = ['$q', '$log', '$http', 'constants'];
 
     private HOST: string = 'http://jservice.io/api';
-    private $http: IHttpService;
-    private $log: ILogService;
-    private $q: IQService;
-    private constants: IConstantsService;
 
     isRoundOver: boolean;
     isDoubleJeopardy: boolean;
@@ -29,10 +25,10 @@ export default class GameEngine implements IGameEngine {
     gameBoard: IGameBoard;
 
     constructor(
-        $q: IQService,
-        $log: ILogService,
-        $http: IHttpService,
-        constants: IConstantsService
+        private $q: IQService,
+        private $log: ILogService,
+        private $http: IHttpService,
+        private constants: IConstantsService
     ) {
         this.$http = $http;
         this.$log = $log;
