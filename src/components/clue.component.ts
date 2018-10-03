@@ -1,6 +1,13 @@
-import {IComponentController, IComponentOptions, ILogService, ISCEService} from 'angular';
+import { IComponentController, IComponentOptions, ILogService, ISCEService, IScope, IWindowService, element } from 'angular';
 import {IGameEngine, IModalBindings} from '../app.interfaces';
 import {IConstantsService} from "../services/constants.service";
+import { IHistoryEngine } from "../services/historyEngine.service";
+
+let _window: any = window;
+
+_window['clue'] = () => {
+    return element($('.clueForm')).scope();
+};
 
 export default class ClueComponent implements IComponentOptions {
     bindings: any;
@@ -28,10 +35,12 @@ export default class ClueComponent implements IComponentOptions {
                     </div>
                     <div class="modal-body">
                         <div class="qa-container row">                        
-                            <p class="col-12 question">{{$ctrl.gameEngine.currentClue.question}}</p>
+                            <p class="col-12 question">{{::$ctrl.gameEngine.currentClue.question}}</p>
                             <p class="col-12 answer">
-                                <span ng-if="$ctrl.gameEngine.hasAttemptedToAnswer" ng-cloak>
-                                    {{$ctrl.gameEngine.currentClue.answer}}
+                                <span 
+                                    ng-if="$ctrl.gameEngine.hasAttemptedToAnswer"
+                                    ng-cloak>
+                                    {{::$ctrl.gameEngine.currentClue.answer}}
                                 </span>
                             </p>       
                         </div>             
@@ -46,10 +55,11 @@ export default class ClueComponent implements IComponentOptions {
                         <button
                             class="btn btn-dark float-left"
                             type="button"
-                            ng-click="$ctrl.toggleAnswerStatus()">
-                            <span ng-if="$ctrl.answerStatus === $ctrl.constants.CORRECT">Mark as Incorrect</span>    
+                            ng-disabled="$ctrl.answerStatus === $ctrl.constants.CORRECT"
+                            ng-click="$ctrl.toggleAnswerStatus()">   
                             <span ng-if="$ctrl.answerStatus !== $ctrl.constants.CORRECT">Mark as Correct</span>    
-                        </button>                    
+                            <span ng-if="$ctrl.answerStatus === $ctrl.constants.CORRECT">Answer Correct</span>    
+                        </button>
                         <button
                             class="btn btn-success" 
                             type="button" 
@@ -65,17 +75,20 @@ export default class ClueComponent implements IComponentOptions {
 
 class Clue implements IComponentController, IModalBindings {
     static readonly $inject: string[] = [
+        '$scope',
         '$log',
         '$sce',
         'constants',
-        'gameEngine'
+        'gameEngine',
+        'historyEngine'
     ];
 
+    private $scope: IScope;
     private $log: ILogService;
     private $sce: ISCEService;
     private gameEngine: IGameEngine;
     private constants: IConstantsService;
-    private log: any;
+    private historyEngine: IHistoryEngine;
 
     modalInstance: any;
     resolve: any;
@@ -83,28 +96,30 @@ class Clue implements IComponentController, IModalBindings {
     answerStatus: number;
 
     constructor(
+        $scope: IScope,
         $log: ILogService,
         $sce: ISCEService,
         constants: IConstantsService,
-        gameEngine: IGameEngine
+        gameEngine: IGameEngine,
+        historyEngine: IHistoryEngine
     ) {
+        this.$scope = $scope;
         this.constants = constants;
         this.$log = $log;
         this.$sce = $sce;
         this.gameEngine = gameEngine;
+        this.historyEngine = historyEngine;
         this.answer = null;
-        this.log = this.$log.info;
         this.answerStatus = this.constants.NO_ANSWER;
     }
 
     $onInit(): void {
         if (!this.resolve.clue.data[0]) {
-            this.$log.error('Error: ', this.resolve);
+            this.$log.error('ERROR: ', this.resolve);
             this.cancel();
         }
-
-        this.gameEngine.currentClue = this.resolve.clue.data[0]; //just get the first one...
-        this.$log.info('this.gameEngine.currentClue: ', this.gameEngine.currentClue);
+        //just get the first one...
+        this.gameEngine.currentClue = this.resolve.clue.data[0];
     };
 
     attemptAnswer(): void {
@@ -114,25 +129,26 @@ class Clue implements IComponentController, IModalBindings {
         let finalAnswer: string = (this.answer) ? this.$sce.trustAsHtml(this.answer.toLowerCase().trim()) : null;
 
         if (correctAnswer === finalAnswer) {
-            this.gameEngine.currentScore += this.gameEngine.currentClue.value;
+            this.gameEngine.addScore();
             this.answerStatus = this.constants.CORRECT;
+            this.historyEngine.addHistoryItem(this.constants.HISTORY_TYPE.GAIN_SCORE);
         } else {
-            this.gameEngine.currentScore -= this.gameEngine.currentClue.value;
+            this.gameEngine.subtractScore();
             this.answerStatus = this.constants.WRONG;
+            this.historyEngine.addHistoryItem(this.constants.HISTORY_TYPE.LOSS_SCORE);
         }
     }
 
     toggleAnswerStatus(): void {
-        this.gameEngine.hasAttemptedToAnswer = true;
+        this.answerStatus = this.constants.CORRECT;
 
-        if (this.answerStatus === this.constants.WRONG) {
-            this.gameEngine.currentScore += this.gameEngine.currentClue.value * 2;
+        if (this.gameEngine.hasAttemptedToAnswer) {
+            this.gameEngine.currentScore = this.gameEngine.previousScore + this.gameEngine.currentClue.value;
         } else {
-            this.gameEngine.currentScore += this.gameEngine.currentClue.value;
+            this.gameEngine.addScore();
         }
 
-        this.answerStatus =
-            (this.answerStatus === this.constants.CORRECT) ? this.constants.WRONG : this.constants.CORRECT;
+        this.gameEngine.hasAttemptedToAnswer = true;
     }
 
     resetClue(): void {

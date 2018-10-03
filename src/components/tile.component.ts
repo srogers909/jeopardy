@@ -1,13 +1,17 @@
 import {IGameEngine} from "../app.interfaces";
 import {IComponentController, IComponentOptions, ILogService} from "angular";
 
-let _template = `<div class="tile-title text-center" ng-if="$ctrl.isActive" ng-click="$ctrl.getClue()"><span>\${{ $ctrl.value }}</span></div>`;
+let _template = `<div 
+class="tile-title text-center" 
+ng-if="$ctrl.isActive" 
+ng-click="$ctrl.getClue()"><span>\${{ ::$ctrl.value }}</span></div>`;
 
 class Tile implements IComponentController {
     static readonly $inject: Array<string> = ['$log', 'gameEngine', '$uibModal'];
 
     category: any = null;
     value: number = null;
+    type: number = 0;
 
     private isActive: boolean = true;
 
@@ -26,17 +30,17 @@ class Tile implements IComponentController {
     }
 
     $onInit(): void {
-        this.$log.info('category: ', this.category);
-        this.$log.info('value: ', this.value);
-        this.isActive = true;
     }
 
     getClue(): void {
+        if (this.type !== 0) return;
+
         this.gameEngine.tilesPlayed += 1;
 
         this.$uibModal
             .open({
                 animation: false,
+                backdrop: 'static',
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
                 windowClass: 'clue-window',
@@ -51,7 +55,6 @@ class Tile implements IComponentController {
             .result
             .catch(() => {
                 this.isActive = false;
-                this.gameEngine.roundOver();
             });
     }
 }

@@ -1,5 +1,6 @@
 @import "primary-colors";
 
+@import "~animate.css/animate.css";
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
@@ -10,7 +11,7 @@
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
 body {
-  background-color: $dark;
+  background-color: $dark !important;
   color: $brightest;
 }
 
@@ -94,18 +95,6 @@ input[type=text] {
   font-weight: 600;
 }
 
-.scoreboard {
-  color: $white;
-  text-align: center;
-}
-
-.score {
-  font-weight: 500;
-  font-size: 1.3vw;
-  color: $white;
-  text-shadow: 2px 2px $dark;
-}
-
 .home {
   min-height: 800px;
 }
@@ -113,10 +102,6 @@ input[type=text] {
 .game-board {
   table, th, td {
     border: solid 3px $dark !important;
-  }
-
-  table {
-
   }
 
   td {
@@ -142,6 +127,7 @@ input[type=text] {
     align-items: center;
     height: 120px;
 
+
     span {
       text-shadow: 2px 2px $dark;
       text-align: center;
@@ -162,7 +148,7 @@ input[type=text] {
     cursor: pointer;
 
     &:hover {
-      background-color: blue;
+      background-color: $blue;
     }
   }
 
@@ -172,7 +158,7 @@ input[type=text] {
 
     span {
       text-shadow: 3px 3px $dark;
-      font-size: 2.9vw;
+      font-size: 2.2vw;
     }
   }
 }
@@ -181,4 +167,6 @@ input[type=text] {
   margin-top: 30%;
   text-align: center;
 }
+
+@import "scoreboard";
 

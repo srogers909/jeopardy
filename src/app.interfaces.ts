@@ -34,17 +34,22 @@ export interface IGameEngine {
     isDoubleJeopardy: boolean;
     isFinalJeopardy: boolean;
     currentClue: any;
+    currentRound: any;
     hasAttemptedToAnswer: boolean;
     currentScore: number;
+    previousScore: number;
     tilesPlayed: number;
+    playerName: string;
     startGame(): any;
     buildGameBoard(): void;
     getClues(value: number, category: number): any;
     getRandomClue(): any;
     getCategories(count: number): any;
     getCategory(id: number): any;
+    addScore(): void;
+    subtractScore(): void;
     roundOver(): void;
-    resetGame(): void;
+    initializeGame(): void;
 }
 
 export interface IClueOptions {
