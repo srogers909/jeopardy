@@ -1,4 +1,3 @@
-
 import {IHttpService, ILogService, IQService, IPromise, copy} from "angular";
 import {IGameEngine, ICategory, IGameBoard} from "../app.interfaces";
 import {IConstantsService} from "./constants.service";
