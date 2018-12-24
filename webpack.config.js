@@ -7,11 +7,11 @@ module.exports = {
     entry: {
         app: ['./src/app.ts'],
         vendor: [
+            'angular/angular.js',
             'jquery/dist/jquery.js',
             'popper.js/dist/popper.js',
             'tooltip.js/dist/tooltip.js',
             'underscore/underscore.js',
-            'angular/angular.js',
             'angular-animate/angular-animate.js',
             'angular-sanitize/angular-sanitize.js',
             'angular-touch/angular-touch.js',

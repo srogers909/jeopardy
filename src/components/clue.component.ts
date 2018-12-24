@@ -3,9 +3,7 @@ import {IGameEngine, IModalBindings} from '../app.interfaces';
 import {IConstantsService} from "../services/constants.service";
 import { IHistoryEngine } from "../services/historyEngine.service";
 
-let _window: any = window;
-
-_window['clue'] = () => {
+window['clue'] = () => {
     return element($('.clueForm')).scope();
 };
 
@@ -120,6 +118,7 @@ class Clue implements IComponentController, IModalBindings {
         }
         //just get the first one...
         this.gameEngine.currentClue = this.resolve.clue.data[0];
+        
     };
 
     attemptAnswer(): void {

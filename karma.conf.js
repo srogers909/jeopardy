@@ -1,7 +1,4 @@
-const
-    webpack = require('webpack'),
-    jasmine = require('jasmine-core'),
-    webpackConfig = require('./webpack.config.js');
+const webpackConfig = require('./webpack.config.js');
 
 module.exports = function(config) {
   config.set({
@@ -50,7 +47,7 @@ module.exports = function(config) {
       autoWatch: true,
       // start these browsers
       // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-      browsers: ['Chrome'],
+      browsers: ['ChromeHeadless'],
       plugins: [
           'karma-chrome-launcher',
           'karma-jasmine',

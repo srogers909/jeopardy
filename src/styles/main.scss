@@ -126,7 +126,7 @@ input[type=text] {
     display: flex;
     align-items: center;
     height: 120px;
-
+    border-radius: 15px;
 
     span {
       text-shadow: 2px 2px $dark;
@@ -146,6 +146,7 @@ input[type=text] {
     align-items: center;
     height: 100px;
     cursor: pointer;
+    border-radius: 15px;
 
     &:hover {
       background-color: $blue;
@@ -169,4 +170,3 @@ input[type=text] {
 }
 
 @import "scoreboard";
-
