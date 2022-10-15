@@ -1,25 +1,27 @@
-## Jeopardy!
+# Jeopardy
 
-This project originated from my desire to learn Webpack 4 including integration with AngularJS & Typescript, yet wanted to make something interesting.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.6.
 
-Big shout out to [jService](http://jservice.io/) and the nice work at providing a pleasant jeopardy question RESTful API.
+## Development server
 
-_<span style="color:red">WARNING:</span> This is a **Work in Progress**.  Wait for **`v1.0.0`** before expecting a reasonable playing experience._
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-### Requirements
+## Code scaffolding
 
-_Note: only really testing in the versions below right now. I recommend using NVM to install the node/npm versions below._
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-* `Node >= v8.9.4`
-* `NPM >= v5.6.0`
+## Build
 
-### Installation
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-* Fork this project.
-* `git clone` from that forked branch.
-* execute `npm i`
+## Running unit tests
 
-### Running the Project
-* Running jasmine tests: `npm test`
-* Building a distributable: `npm run build`
-* Running a Dev Server: `npm start`
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
