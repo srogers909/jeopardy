@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "gyparody";
+    src: url('./gyparody/gyparody_rg.ttf');
+}
+
+@font-face {
+    font-family: "gyparody bold";
+    src: url('./gyparody/gyparody_hv.ttf');
+}

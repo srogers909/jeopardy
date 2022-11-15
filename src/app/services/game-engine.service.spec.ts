@@ -1,12 +1,18 @@
+import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { GameEngineService } from './game-engine.service';
 
-describe('GameEngineService', () => {
-  let service: GameEngineService;
+xdescribe('GameEngineService', () => {
+  let service: GameEngineService, httpClient: HttpClient;
+
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        HttpClient
+      ]
+    });
     service = TestBed.inject(GameEngineService);
   });
 

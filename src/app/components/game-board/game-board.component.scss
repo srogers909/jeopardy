@@ -1,0 +1,30 @@
+@import './../../../primary-pallette';
+
+.game-board {
+    width: 1280px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    table {
+        width: 100%;
+        height: 100%;
+        border: solid 2px $darkest;
+
+        th, td {
+            max-width: 213px;
+            min-width: 213px;
+            height: 150px;            
+        }
+
+        td {
+            height: 120px;  
+        }
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .game-board {
+        width: 1024px;
+    }
+}

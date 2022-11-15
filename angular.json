@@ -28,7 +28,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/fonts/fonts-gyparody.css",
+              "src/assets/fonts/fonts-Korinna_Regular.css",
+              "src/assets/fonts/fonts-Swiss_911_Compressed_Regular.css"
             ],
             "scripts": []
           },
@@ -96,7 +99,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/fonts/fonts-gyparody.css",
+              "src/assets/fonts/fonts-Korinna_Regular.css",
+              "src/assets/fonts/fonts-Swiss_911_Compressed_Regular.css"
             ],
             "scripts": []
           }

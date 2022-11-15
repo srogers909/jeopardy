@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ApiService } from './api.service';
 import {HttpClient, HttpHandler} from "@angular/common/http";
 import {hot} from "jest-marbles";
+import { ICategory, IClueOptions } from '../interfaces';
 
 describe('ApiServiceService', () => {
   let service: ApiService, httpClient: HttpClient;
@@ -44,7 +45,7 @@ describe('ApiServiceService', () => {
       test('it should return a single ICategory item', () => {
         const returnVal = hot('---a---|', {a: []});
         jest.spyOn(httpClient, 'get').mockReturnValue(returnVal);
-        expect(service.getCategory(29)).toBeObservable(returnVal);
+        expect(service.getCategoryAndClues(29)).toBeObservable(returnVal);
         expect(httpClient.get).toHaveBeenCalled();
       });
 
@@ -52,7 +53,7 @@ describe('ApiServiceService', () => {
         const returnVal = hot('---#');
         jest.spyOn(httpClient, 'get').mockReturnValue(returnVal);
 
-        let result = service.getCategory(29);
+        let result = service.getCategoryAndClues(29);
 
         expect(result).toBeObservable(returnVal);
         expect(result).toBeMarble('---#');
@@ -130,7 +131,7 @@ describe('ApiServiceService', () => {
           const returnVal = hot('---a---|', {a: {'value': 200}});
           jest.spyOn(httpClient, 'get').mockReturnValue(returnVal);
 
-          let result = service.getClues(200);
+          let result = service.getClues({ value: 200 } as IClueOptions);
 
           expect(result).toBeObservable(returnVal);
           expect(httpClient.get).toHaveBeenCalled();
@@ -142,7 +143,7 @@ describe('ApiServiceService', () => {
           const returnVal = hot('---a---|', {a: {'value': 200, 'category': {'id': 40}}});
           jest.spyOn(httpClient, 'get').mockReturnValue(returnVal);
 
-          let result = service.getClues(200, 40);
+          let result = service.getClues({ value: 200, category: 40 } as IClueOptions);
 
           expect(result).toBeObservable(returnVal);
           expect(httpClient.get).toHaveBeenCalled();

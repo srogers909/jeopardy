@@ -1,0 +1,40 @@
+@import "./../../../primary-pallette";
+
+.tile {
+    background-color: $blue;
+    color: $lightest;
+    font-family: 'Korinna';
+    color: $lightest;    
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+
+    .question {
+        font-size: 1rem;
+        text-shadow: 2px 2px $darkest;
+    }
+
+    .price {
+        font-family: 'Swiss 911';
+        color: $gold;
+        text-shadow: 2px 2px $darkest;
+        cursor: pointer;
+        font-size: 4rem;
+    }
+
+    .category {
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        text-shadow: none;
+        font-weight: bold;
+        text-overflow: ellipsis;
+    }
+}
+
+
+

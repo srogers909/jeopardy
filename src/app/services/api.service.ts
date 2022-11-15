@@ -1,49 +1,57 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ICategory, IClue} from "../interfaces";
+import {ICategory, IClue, IClueOptions} from "../interfaces";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private http: HttpClient;
-  private HOST: string = 'https://jservice.io/api';
+  private HOST: string = 'http://jservice.io/api';
 
   constructor(private httpClient: HttpClient) {
-    this.http = httpClient;
   }
 
   getCategories(count: number = 1): Observable<Array<ICategory>> {
-    return this.http.get<Array<ICategory>>
+    return this.httpClient.get<Array<ICategory>>
       (`${this.HOST}/categories?count=${count}&offset=${Math.floor((Math.random() * 2500) + 1)}`);
   }
 
-  getCategory(id: number): Observable<ICategory> {
-    return this.http.get<ICategory>(`${this.HOST}/category?id=${id}`);
+  getCategoryAndClues(categoryId: number): Observable<ICategory> {
+    return this.httpClient.get<ICategory>(`${this.HOST}/category?id=${categoryId}`);
   }
 
   getRandomClue(): Observable<IClue> {
-    return this.http.get<IClue>(`${this.HOST}/random`);
+    return this.httpClient.get<IClue>(`${this.HOST}/random`);
   }
 
   getFinal(): Observable<IClue> {
-    return this.http.get<IClue>(`${this.HOST}/final`);
+    return this.httpClient.get<IClue>(`${this.HOST}/final`);
   }
 
-  getClues(value?: number, category?: number): Observable<Array<IClue>> {
+  getClues(options?: IClueOptions): Observable<Array<IClue>> {
     let url: string = `${this.HOST}/clues`;
 
-    if (value || category) {
-      url += '?';
-    }
-    if (value) {
-      url += `value=${value}&`;
-    }
-    if (category) {
-      url += `category=${category}&`;
+    if (options) {
+      url += '?'
+
+      if (options.value) {
+        url += `value=${options.value}&`
+      }
+      if (options.category) {
+        url += `category=${options.category}&`
+      }
+      if (options.offset) {
+        url += `offset=${options.offset}&`
+      }
+      if (options.max_date) {
+        url += `max_date=${options.max_date}&`
+      }
+      if (options.min_date) {
+        url += `min_date=${options.min_date}`
+      }
     }
 
-    return this.http.get<Array<IClue>>(url);
+    return this.httpClient.get<Array<IClue>>(url);
   }
 }

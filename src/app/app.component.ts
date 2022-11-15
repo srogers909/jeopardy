@@ -8,11 +8,9 @@ import {RouterOutlet} from "@angular/router";
   imports: [CommonModule, RouterOutlet],
   styleUrls: ['./app.component.scss'],
   template: `
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>
+    <router-outlet></router-outlet>
   `
 })
 export class AppComponent {
-  title = 'jeopardy';
+  title = 'Jeopardy - Angular Version';
 }
