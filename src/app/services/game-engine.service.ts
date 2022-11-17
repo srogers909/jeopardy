@@ -5,6 +5,7 @@ import {BehaviorSubject, concatMap, Observable, of, tap, take, throwError, forkJ
 import _ from 'lodash'
 import { AppSettings } from '../constants'
 import { StorageService } from './storage.service'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,8 @@ export class GameEngineService implements OnDestroy {
   boardDimensions: Array<IClue>
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private modalService: NgbModal
   ) {
     this.categories = new Array<ICategory>()
     this.destroyer$ = new BehaviorSubject(false)
@@ -81,6 +83,10 @@ export class GameEngineService implements OnDestroy {
     }
 
     return foundClue;
+  }
+
+  openClueModal(content: any): void {
+    this.modalService.open(content, { centered: true });
   }
 
   /**

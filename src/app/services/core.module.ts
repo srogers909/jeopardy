@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {HttpClientModule} from "@angular/common/http";
 import {ApiService} from "./api.service";
 import {GameEngineService} from "./game-engine.service";
+import { WebSpeechService } from './web-speech.service';
 
 @NgModule({
   declarations: [],
@@ -12,6 +13,7 @@ import {GameEngineService} from "./game-engine.service";
   ],
   providers: [
     ApiService,
+    WebSpeechService,
     GameEngineService
   ]
 })
