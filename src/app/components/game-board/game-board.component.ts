@@ -1,11 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {GameEngineService} from "../../services/game-engine.service";
 import {CoreModule} from "../../services/core.module";
 import {TileComponent} from "../tile/tile.component";
-import {ICategory, IClue, IGameBoard, ITileOptions} from "../../interfaces";
+import {ICategory, IClue, IGameBoard, ITileOptions, ModalConfig} from "../../interfaces";
 import {BehaviorSubject, take, takeUntil} from "rxjs";
 import { AppSettings } from 'src/app/constants';
+import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalComponent } from '../modal/modal.component';
+import { WebSpeechService } from 'src/app/services/web-speech.service';
 
 @Component({
   selector: 'app-game-board',
@@ -13,7 +16,9 @@ import { AppSettings } from 'src/app/constants';
   imports: [
     CommonModule,
     CoreModule,
-    TileComponent
+    NgbModalModule,
+    TileComponent,
+    ModalComponent
   ],
   styleUrls: ['./game-board.component.scss'],
   template: `
@@ -39,10 +44,16 @@ import { AppSettings } from 'src/app/constants';
           </tr>
         </tbody>
       </table>
+
+      <modal #modal [modalConfig]="modalConfig">
+        <div>{{currentClue.question}}</div>
+      </modal>
     </div>
   `
 })
 export class GameBoardComponent implements OnInit, OnDestroy {
+  @ViewChild('modal') private modalComponent: ModalComponent
+  
   private destroyer$: BehaviorSubject<any>;
 
   clueBoard: [Array<IClue>, Array<IClue>, Array<IClue>, Array<IClue>, Array<IClue>];
@@ -50,13 +61,19 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   isDoubleJeopardy: boolean = false;
   clueRowCount = new Array<number>(5);
   engine: GameEngineService;
+  modalConfig: ModalConfig = { modalTitle: '' };
+  currentClue: IClue;
 
   constructor(
     private _gameEngine: GameEngineService,
+    private webSpeechService: WebSpeechService,
+    private modalService: NgbModal
   ) {
     this.destroyer$ = new BehaviorSubject<any>(null);
     this.engine = _gameEngine;
     this.clueStore = [];
+    this.currentClue = {}
+    this.webSpeechService.init();
   }
 
   private setUpGameBoard() {
@@ -67,6 +84,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           next: (board: any) => {
             this.clueStore = board[0];
             this.clueBoard = board[1];
+            
           },
           error: (err) => {
             // todo
@@ -75,10 +93,31 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       );
   }
 
-  captureClueClick(clue: IClue) {
-    const newClue: IClue = this.engine.getClueFromClueStore(clue, this.clueStore);
+  captureClueClick(clue: IClue) {    
+    
+    this.currentClue = this.engine.getClueFromClueStore(clue, this.clueStore);
 
-    console.log('newClue:', newClue)
+    if (this.currentClue && this.currentClue.question) {
+      this.modalConfig = {
+        modalTitle: this.currentClue.question,
+        dismissButtonLabel: 'Give Up',
+        closeButtonLabel: 'Solve'
+      }
+
+      // answer w/ button click maybe?
+      this.webSpeechService.start();
+
+      this.openModal()
+        .then(result => {
+          console.log('closed:', result)
+        })
+    }
+
+    console.log('this.currentClue:', this.currentClue)
+  }
+
+  async openModal() {
+    return await this.modalComponent.open()
   }
 
   ngOnInit(): void {
